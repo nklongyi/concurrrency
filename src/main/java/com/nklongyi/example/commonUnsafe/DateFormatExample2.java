@@ -1,26 +1,29 @@
 package com.nklongyi.example.commonUnsafe;
 
-import com.nklongyi.annotation.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by longyi on 2018-06-27.
  */
 @Slf4j
-public class DateFormatExample1 {
+public class DateFormatExample2 {
 
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 200;
+
+    //使用线程安全的joda-time
+    public static DateTimeFormatter dateTimeFormat = DateTimeFormat.forPattern("yyyyMMdd");
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -28,10 +31,11 @@ public class DateFormatExample1 {
         final CountDownLatch countDownLatch = new CountDownLatch(clientTotal);
 
         for (int i=0;i<clientTotal;i++){
+            final int count = i;
             executorService.execute(()->{
                 try {
                     semaphore.acquire();
-                    update();
+                    update(count);
                     semaphore.release();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -43,13 +47,8 @@ public class DateFormatExample1 {
         executorService.shutdown();
     }
 
-    private static void update(){
-        try {
-             SimpleDateFormat simpleDateFormat  = new SimpleDateFormat("yyyyMMdd");
-            simpleDateFormat.parse("20180627");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    private static void update(int i){
+        log.info("{},{}",i,DateTime.parse("20180627",dateTimeFormat).toDate());;
     }
 
 
