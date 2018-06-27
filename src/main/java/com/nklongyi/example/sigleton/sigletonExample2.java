@@ -5,7 +5,7 @@ import com.nklongyi.annotation.ThreadSafe;
 /**
  * Created by longyi on 2018-06-25.
  */
-//饿汉模式 -单例，在类加载阶段就加载实例,线程安全
+//饿汉模式 -单例，在类加载阶段就加载实例,线程安全.
 @ThreadSafe
 public class sigletonExample2 {
     //私有构造函数

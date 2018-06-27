@@ -1,4 +1,4 @@
-package com.nklongyi.example.count;
+package com.nklongyi.example.commonUnsafe;
 
 import com.nklongyi.annotation.NotThreadSafe;
 import com.nklongyi.annotation.ThreadSafe;
@@ -10,17 +10,20 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by longyi on 2018-06-25.
+ * StringBuilder 不是线程安全的类
  */
 @NotThreadSafe
-public class CountExample7 {
+public class StringExample1 {
 
     public static int clientTotal = 5000;
 
     public static int threadTotal = 200;
 
-    public static volatile int  count = 0;
+    public static StringBuilder stringBuilder = new StringBuilder();
 
+    /**
+     *
+     */
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
@@ -31,7 +34,7 @@ public class CountExample7 {
             executorService.execute(()->{
                 try {
                     semaphore.acquire();
-                    add();
+                    update();
                     semaphore.release();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -41,12 +44,11 @@ public class CountExample7 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        System.out.println("count:"+count);
-
+        System.out.println("size:{}:"+stringBuilder.length());
     }
 
-    private static void add(){
-        count++;
+    private static void update(){
+        stringBuilder.append("1");
     }
 
 }
