@@ -18,7 +18,6 @@ import java.util.concurrent.Semaphore;
  */
 @Slf4j
 public class CollectionsExample3 {
-
     // java.util.ConcurrentModificationException
   public static void test1(Vector<Integer> vector){ //for each
       for (Integer i:vector) {
@@ -46,8 +45,6 @@ public class CollectionsExample3 {
           }
       }
   }
-
-
     public static void main(String[] args) {
         Vector<Integer> vector = new Vector<>();
         vector.add(1);
